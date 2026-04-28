@@ -100,9 +100,11 @@
 ## 3.算法原理
 **FFT-DI（基于快速傅里叶变换的直接积分法）** 是一种用于快速、精确计算 **瑞利-索末菲（Rayleigh-Sommerfeld, RS）衍射积分** 的数值算法。
 ### 1. 物理本质：卷积 (Convolution)
-点光源在空间中产生的球面波分布$g(x,y,z) = \frac{1}{2\pi} \frac{e^{jkr}}{r} (\frac{1}{r}-jk) \frac{z}{r}$,
+点光源在空间中产生的球面波分布 $g(x,y,z) = \frac{1}{2\pi} \frac{e^{jkr}}{r} (\frac{1}{r}-jk) \frac{z}{r}$ ,
+
 $r = \sqrt{x^2+y^2+z^2}$.
-瑞利-索末菲衍射公式在数学上可以看作是 **“输入光场 $U_{in}$”** 与 **“脉冲响应函数（核函数） $g$”** 的卷积：
+
+瑞利-索末菲衍射公式在数学上可以看作是 **“输入光场 $U_{in}$ ”** 与 **“脉冲响应函数（核函数） $g$ ”** 的卷积：
 
 
 
@@ -112,15 +114,20 @@ U(x, y, z) &= \iint_{A} U(\varsigma, \eta, 0) g(x-\varsigma, y-\eta, z) \, d\var
 &= \iint_{A} U(\varsigma, \eta, 0) \frac{\exp(jkr)}{2\pi r} \frac{z}{r} \left( \frac{1}{r} - jk \right) \, d\varsigma \, d\eta
 \end{aligned}
 $$
-其中，$r = \sqrt{（x-\varsigma）^2+（y-\eta）^2+z^2}$.
-它正是Rayleigh -Sommerfeld衍射积分公式，可用于近场和远场，无需任何近似。在大多数情况下，方程中的衍射积分式必须采用直接数值积分计算。在孔径平面上，将U采样为N$\times$N个等距网格。对于观测平面$x_m，y_n，z$上的一点，积分可以通过数值积分计算为黎曼和：
+
+其中， $r = \sqrt{（x-\varsigma）^2+（y-\eta）^2+z^2}$ .
+它正是Rayleigh -Sommerfeld衍射积分公式，可用于近场和远场，无需任何近似。在大多数情况下，方程中的衍射积分式必须采用直接数值积分计算。在孔径平面上，将U采样为N $\times$ N个等距网格。对于观测平面 $x_m，y_n，z$ 上的一点，积分可以通过数值积分计算为黎曼和：
+
 $$ U(x_m, y_n, z) = \sum_{i=1}^{N} \sum_{j=1}^{N} U(\varsigma_i, \eta_j, 0) g \times (x_m - \varsigma_i, y_n - \eta_j, z) \Delta \varsigma \Delta \eta $$
-其中，$\Delta \varsigma$和$\Delta \eta$是孔径平面上的采样间隔。
+
+其中，$\Delta \varsigma$ 和 $\Delta \eta$ 是孔径平面上的采样间隔。
 
 ### 2. 数学技巧：基于快速傅里叶变换的直接积分法 (Fast-Fourier-Transform Based Direct Integration Method)
-直接在空间域计算上述积分（直接积分法，DI），计算复杂度是 $O(N^4)$，非常慢。  
+直接在空间域计算上述积分（直接积分法，DI），计算复杂度是 $O(N^4)$ ，非常慢。  
 FFT-DI 利用卷积定理：**时域/空域的卷积 = 频域的乘积**。离散卷积可以计算为：
+
 $$ S = \text{IFFT2} [ \text{FFT2}(U) \cdot \times \text{FFT2}(H) ] \Delta \varsigma \Delta \eta $$
+
 **关键步骤 —— 补零 (Zero Padding)：**
 
 -   **问题**：直接用 FFT 计算的是 **循环卷积 (Circular Convolution)**，而物理上的光传播是 **线性卷积 (Linear Convolution)**。如果直接算，光会从左边“卷”到右边，导致混叠错误。
@@ -418,7 +425,7 @@ profile = data["line_profile"]  # 1D 复数数组
 对于(5991*5991)的时域有限差分法生成的相复振幅数据(如光源示例1所示)进行试验。原算法7张RTX509032G联算用时大于一小时，基于FFT-DI的计算方法单张卡
 计算用时1分02秒
 
-![项目截图](/mark1.png)
+![项目截图](/picture/1.png)
 <p align="center">光源示例1
 
 通过对计算结果进行对比验证，结果显示光强分布在单位量级下具有高度一致性，
@@ -426,16 +433,16 @@ profile = data["line_profile"]  # 1D 复数数组
 仅出现在光强趋于零的奇异区域。此类相位误差主要归因于低信噪比区域下复振幅
 实部与虚部极小值导致的数值计算不稳定性，在有效物理孔径内，模型展现了较高的数值保真度。(如测试结果1所示)’
 
-![项目截图](/mark2.png)
+![项目截图](/picture/2.png)
 <p align="center">测试结果1
 
 另一组测试数据如光源示例2与测试结果2展示。
 
-![项目截图](/mark3.png)
+![项目截图](/picture/3.png)
 <p align="center">光源示例2
 
 
-![项目截图](/mark4.png)
+![项目截图](/picture/4.png)
 <p align="center">测试结果2
 
 ## 8.常见问题
