@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+title: FFT-DI
+message: "If this software helps your work, please cite the FFT-DI method paper and this repository."
+type: software
+authors:
+  - name: FFT-DI contributors
+version: 0.1.0
+date-released: 2026-04-28
+references:
+  - type: article
+    authors:
+      - family-names: Shen
+        given-names: Fabin
+      - family-names: Wang
+        given-names: Anbo
+    title: "Fast-Fourier-transform based numerical integration method for the Rayleigh-Sommerfeld diffraction formula"
+    journal: Applied Optics
+    volume: 45
+    issue: 6
+    start: 1102
+    end: 1110
+    year: 2006
+    doi: 10.1364/AO.45.001102
