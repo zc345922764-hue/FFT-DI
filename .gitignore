@@ -19,3 +19,5 @@ results/
 *.tif
 *.tiff
 *.log
+!picture/
+!picture/*.png
